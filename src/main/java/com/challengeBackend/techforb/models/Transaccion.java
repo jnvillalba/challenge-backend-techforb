@@ -14,14 +14,20 @@ public class Transaccion {
     private LocalDateTime fecha;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private User usuario;
+    private User usuarioRemitente;
 
-    public Transaccion(double monto, TipoTransaccion tipo, String descripcion, LocalDateTime fecha, User usuario) {
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private User usuarioDestinatario;
+
+    public Transaccion(double monto, TipoTransaccion tipo, String descripcion, LocalDateTime fecha,
+                       User usuarioRemitente, User usuarioDestinatario) {
         this.monto = monto;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        this.usuario = usuario;
+        this.usuarioRemitente = usuarioRemitente;
+        this.usuarioDestinatario = usuarioDestinatario;
     }
 
     public double getMonto() {
@@ -56,12 +62,21 @@ public class Transaccion {
         this.fecha = fecha;
     }
 
-    public User getUsuario() {
-        return usuario;
+
+    public User getUsuarioRemitente() {
+        return usuarioRemitente;
     }
 
-    public void setUsuario(User usuario) {
-        this.usuario = usuario;
+    public void setUsuarioRemitente(User usuarioRemitente) {
+        this.usuarioRemitente = usuarioRemitente;
+    }
+
+    public User getUsuarioDestinatario() {
+        return usuarioDestinatario;
+    }
+
+    public void setUsuarioDestinatario(User usuarioDestinatario) {
+        this.usuarioDestinatario = usuarioDestinatario;
     }
 }
 
