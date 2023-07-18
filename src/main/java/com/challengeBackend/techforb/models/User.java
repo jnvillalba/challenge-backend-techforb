@@ -1,5 +1,7 @@
 package com.challengeBackend.techforb.models;
 
+import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -112,5 +114,27 @@ public class User {
 
     public void setTransaccionesDestinatarios(Set<Transaccion> transaccionesDestinatarios) {
         this.transaccionesDestinatarios = transaccionesDestinatarios;
+    }
+
+    public void actualizarSaldo(double nuevoSaldo) {
+        this.balance = nuevoSaldo;
+    }
+
+    public void extraerDinero(double cantidad) throws SaldoInsuficienteException {
+        if (this.balance >= cantidad) {
+            double nuevoSaldo = this.balance - cantidad;
+            actualizarSaldo(nuevoSaldo);
+        } else {
+            throw new SaldoInsuficienteException();
+        }
+    }
+
+    public void depositarDinero(double cantidad) {
+        double nuevoSaldo = this.balance + cantidad;
+        actualizarSaldo(nuevoSaldo);
+    }
+
+    public void addTarjeta(Tarjeta tarjeta) {
+        this.tarjetas.add(tarjeta);
     }
 }

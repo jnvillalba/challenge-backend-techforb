@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -48,45 +49,54 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void realizarTransferencia(int idUsuarioRemitente, int idUsuarioDestinatario, double cantidad) throws SaldoInsuficienteException, UsuarioNoExisteException {
-        Optional<User> remitenteOptional = findById(idUsuarioRemitente);
-        Optional<User> destinatarioOptional = findById(idUsuarioDestinatario);
+    public void realizarTransferencia(int idUsuarioRemitente, int idUsuarioDestinatario, double cantidad)
+            throws SaldoInsuficienteException, UsuarioNoExisteException {
+        User remitente = getUserById(idUsuarioRemitente);
+        User destinatario = getUserById(idUsuarioDestinatario);
 
-        if (remitenteOptional.isPresent() && destinatarioOptional.isPresent()) {
-            User remitente = remitenteOptional.get();
-            User destinatario = destinatarioOptional.get();
+        double saldoRemitente = remitente.getBalance();
 
-            double saldoRemitente = remitente.getBalance();
+        if (saldoRemitente >= cantidad) {
+            double nuevoSaldoRemitente = saldoRemitente - cantidad;
+            double nuevoSaldoDestinatario = destinatario.getBalance() + cantidad;
 
-            if (saldoRemitente >= cantidad) {
-                double nuevoSaldoRemitente = saldoRemitente - cantidad;
-                double nuevoSaldoDestinatario = destinatario.getBalance() + cantidad;
-
-                remitente.setBalance(nuevoSaldoRemitente);
-                destinatario.setBalance(nuevoSaldoDestinatario);
-                saveUser(remitente);
-                saveUser(destinatario);
-
-            } else {
-                throw new SaldoInsuficienteException();
-            }
+            remitente.actualizarSaldo(nuevoSaldoRemitente);
+            destinatario.actualizarSaldo(nuevoSaldoDestinatario);
+            saveUser(remitente);
+            saveUser(destinatario);
         } else {
-            int idUsuarioNoExistente = remitenteOptional.isEmpty() ? idUsuarioRemitente : idUsuarioDestinatario;
-            throw new UsuarioNoExisteException(idUsuarioNoExistente);
+            throw new SaldoInsuficienteException();
         }
     }
 
     @Override
-    public void ExtraerDinero(int userId, double amount) {
-
+    public void extraerDinero(int userId, double cantidad) throws UsuarioNoExisteException, SaldoInsuficienteException {
+        User usuario = getUserById(userId);
+        usuario.extraerDinero(cantidad);
+        saveUser(usuario);
     }
 
     @Override
-    public void depositarDinero(int userId, double amount) {
-
+    public void depositarDinero(int userId, double amount) throws UsuarioNoExisteException {
+        User usuario = getUserById(userId);
+        usuario.depositarDinero(amount);
+        saveUser(usuario);
     }
-    @Override
-    public void addTarjeta(int userId, Tarjeta tarjeta) {
 
+    @Override
+    public void addTarjeta(int userId, Tarjeta tarjeta) throws UsuarioNoExisteException {
+        User usuario = getUserById(userId);
+        usuario.addTarjeta(tarjeta);
+        saveUser(usuario);
+    }
+
+    private User getUserById(int userId) throws UsuarioNoExisteException {
+        Optional<User> userOptional = findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new UsuarioNoExisteException(userId);
+        }
+
+        return userOptional.get();
     }
 }
