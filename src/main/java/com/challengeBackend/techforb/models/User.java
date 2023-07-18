@@ -35,7 +35,6 @@ public class User {
 
     private double balance;
 
-
     public User() {
     }
 

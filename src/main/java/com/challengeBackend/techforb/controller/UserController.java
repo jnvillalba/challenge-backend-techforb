@@ -90,7 +90,7 @@ public class UserController {
     @PostMapping("/{id}/depositarDinero")
     public ResponseEntity<Void> depositarDinero(
             @PathVariable("id") int userId,
-            @RequestParam("amount") double cantidad
+            @RequestParam("cantidad") double cantidad
     ) throws UsuarioNoExisteException {
         userService.depositarDinero(userId, cantidad);
         return new ResponseEntity(new Mensaje("Dinero Depositado"), HttpStatus.OK);

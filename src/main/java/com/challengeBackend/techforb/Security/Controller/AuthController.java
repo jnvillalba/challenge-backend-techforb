@@ -43,7 +43,7 @@ public class AuthController {
     @Autowired
     JwtProvider jwtprovider;
     
-    @PostMapping("/nuevo")
+    @PostMapping("/register")
     public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("Campos mal puestos o documento invalido"), HttpStatus.BAD_REQUEST);
@@ -64,8 +64,6 @@ public class AuthController {
         usuarioService.save(usuario);
         
         return new ResponseEntity(new Mensaje("Usuario guardado"), HttpStatus.CREATED);
-        
-        
     }
     
     
