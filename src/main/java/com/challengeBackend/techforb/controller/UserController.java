@@ -1,80 +1,106 @@
 package com.challengeBackend.techforb.controller;
 
+import com.challengeBackend.techforb.Security.Controller.Mensaje;
 import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
 import com.challengeBackend.techforb.exceptions.UsuarioNoExisteException;
 import com.challengeBackend.techforb.models.Tarjeta;
 import com.challengeBackend.techforb.models.User;
-import com.challengeBackend.techforb.services.IUserService;
 import com.challengeBackend.techforb.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.findAll();
+    @GetMapping("/usuarios")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id) throws UsuarioNoExisteException {
+    public ResponseEntity<User> getUserById(@PathVariable int id) throws UsuarioNoExisteException {
         Optional<User> userOptional = userService.findById(id);
 
         if (userOptional.isEmpty()) {
             throw new UsuarioNoExisteException(id);
         }
 
-        return userOptional.get();
+        User user = userOptional.get();
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
-    //Update user ?
+    @PutMapping("/{id}/update")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) throws UsuarioNoExisteException {
+        Optional<User> userOptional = userService.findById(id);
 
-    @PostMapping("/{id}/transfer")
-    public void realizarTransferencia(
+        if (userOptional.isEmpty()) {
+            throw new UsuarioNoExisteException(id);
+        }
+
+        User user = userOptional.get();
+        user.setNombre(updatedUser.getNombre());
+        user.setApellido(updatedUser.getApellido());
+        user.setNroDocumento(updatedUser.getNroDocumento());
+        user.setBalance(updatedUser.getBalance());
+
+        userService.saveUser(user);
+        return new ResponseEntity(new Mensaje("Usuario actualizado"), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/transferir")
+    public ResponseEntity<Void> realizarTransferencia(
             @PathVariable("id") int idUsuarioRemitente,
             @RequestParam("destinatario") int idUsuarioDestinatario,
             @RequestParam("cantidad") double cantidad
     ) throws SaldoInsuficienteException, UsuarioNoExisteException {
         userService.realizarTransferencia(idUsuarioRemitente, idUsuarioDestinatario, cantidad);
+        return new ResponseEntity(new Mensaje("Transferencia Realizada"), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/withdraw")
-    public void extraerDinero(
+    @PostMapping("/{id}/extraerDinero")
+    public ResponseEntity<Void> extraerDinero(
             @PathVariable("id") int userId,
             @RequestParam("cantidad") double cantidad
     ) throws UsuarioNoExisteException, SaldoInsuficienteException {
         userService.extraerDinero(userId, cantidad);
+        return new ResponseEntity(new Mensaje("Dinero Extraido"), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/deposit")
-    public void depositarDinero(
+    @PostMapping("/{id}/depositarDinero")
+    public ResponseEntity<Void> depositarDinero(
             @PathVariable("id") int userId,
             @RequestParam("amount") double amount
     ) throws UsuarioNoExisteException {
         userService.depositarDinero(userId, amount);
+        return new ResponseEntity(new Mensaje("Dinero Depositado"), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/cards")
-    public void addTarjeta(
+    @PostMapping("/{id}/agregarTarjeta")
+    public ResponseEntity<Void> addTarjeta(
             @PathVariable("id") int userId,
             @RequestBody Tarjeta tarjeta
     ) throws UsuarioNoExisteException {
         userService.addTarjeta(userId, tarjeta);
+        return new ResponseEntity(new Mensaje("Tarjeta Agregada"), HttpStatus.OK);
     }
 }
