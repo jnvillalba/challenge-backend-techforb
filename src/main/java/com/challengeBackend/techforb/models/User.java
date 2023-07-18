@@ -25,10 +25,10 @@ public class User {
     private int nroDocumento;
 
     @OneToMany(mappedBy = "usuarioRemitente")
-    private Set<Transaccion> transaccionesRemitentes = new HashSet<>();
+    private Set<Transaccion> transaccionesSalientes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuarioDestinatario")
-    private Set<Transaccion> transaccionesDestinatarios = new HashSet<>();
+    private Set<Transaccion> transaccionesEntrantes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario")
     private Set<Tarjeta> tarjetas = new HashSet<>();
@@ -44,8 +44,8 @@ public class User {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nroDocumento = nroDocumento;
-        this.transaccionesRemitentes = transaccionesRemitentes;
-        this.transaccionesDestinatarios = transaccionesDestinatarios;
+        this.transaccionesSalientes = transaccionesRemitentes;
+        this.transaccionesEntrantes = transaccionesDestinatarios;
         this.tarjetas = tarjetas;
         this.balance = balance;
     }
@@ -100,20 +100,20 @@ public class User {
         this.balance = balance;
     }
 
-    public Set<Transaccion> getTransaccionesRemitentes() {
-        return transaccionesRemitentes;
+    public Set<Transaccion> getTransaccionesSalientes() {
+        return transaccionesSalientes;
     }
 
-    public void setTransaccionesRemitentes(Set<Transaccion> transaccionesRemitentes) {
-        this.transaccionesRemitentes = transaccionesRemitentes;
+    public void setTransaccionesSalientes(Set<Transaccion> transaccionesSalientes) {
+        this.transaccionesSalientes = transaccionesSalientes;
     }
 
-    public Set<Transaccion> getTransaccionesDestinatarios() {
-        return transaccionesDestinatarios;
+    public Set<Transaccion> getTransaccionesEntrantes() {
+        return transaccionesEntrantes;
     }
 
-    public void setTransaccionesDestinatarios(Set<Transaccion> transaccionesDestinatarios) {
-        this.transaccionesDestinatarios = transaccionesDestinatarios;
+    public void setTransaccionesEntrantes(Set<Transaccion> transaccionesEntrantes) {
+        this.transaccionesEntrantes = transaccionesEntrantes;
     }
 
     public void actualizarSaldo(double nuevoSaldo) {
@@ -137,5 +137,13 @@ public class User {
     public void addTarjeta(Tarjeta tarjeta) {
         this.tarjetas.add(tarjeta);
         tarjeta.setUsuario(this);
+    }
+
+    public void addTransaccionSaliente(Transaccion transaccion) {
+        this.transaccionesSalientes.add(transaccion);
+    }
+
+    public void addTransaccionEntrantes(Transaccion transaccion) {
+        this.transaccionesEntrantes.add(transaccion);
     }
 }

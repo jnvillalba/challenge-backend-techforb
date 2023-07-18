@@ -71,9 +71,10 @@ public class UserController {
     public ResponseEntity<Void> realizarTransferencia(
             @PathVariable("id") int idUsuarioRemitente,
             @RequestParam("destinatario") int idUsuarioDestinatario,
-            @RequestParam("cantidad") double cantidad
+            @RequestParam("cantidad") double cantidad,
+            @RequestParam("motivo") String motivo
     ) throws SaldoInsuficienteException, UsuarioNoExisteException {
-        userService.realizarTransferencia(idUsuarioRemitente, idUsuarioDestinatario, cantidad);
+        userService.realizarTransferencia(idUsuarioRemitente, idUsuarioDestinatario, cantidad,motivo);
         return new ResponseEntity(new Mensaje("Transferencia Realizada"), HttpStatus.OK);
     }
 
@@ -89,9 +90,9 @@ public class UserController {
     @PostMapping("/{id}/depositarDinero")
     public ResponseEntity<Void> depositarDinero(
             @PathVariable("id") int userId,
-            @RequestParam("amount") double amount
+            @RequestParam("amount") double cantidad
     ) throws UsuarioNoExisteException {
-        userService.depositarDinero(userId, amount);
+        userService.depositarDinero(userId, cantidad);
         return new ResponseEntity(new Mensaje("Dinero Depositado"), HttpStatus.OK);
     }
 

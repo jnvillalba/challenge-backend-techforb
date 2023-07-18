@@ -3,13 +3,16 @@ package com.challengeBackend.techforb.services.impl;
 import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
 import com.challengeBackend.techforb.exceptions.UsuarioNoExisteException;
 import com.challengeBackend.techforb.models.Tarjeta;
+import com.challengeBackend.techforb.models.Transaccion;
 import com.challengeBackend.techforb.models.User;
 import com.challengeBackend.techforb.repository.TarjetaDAO;
+import com.challengeBackend.techforb.repository.TransaccionDAO;
 import com.challengeBackend.techforb.repository.UserDAO;
 import com.challengeBackend.techforb.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     TarjetaDAO tarjetaDAO;
+
+    @Autowired
+    TransaccionDAO transaccionDAO;
     @Override
     public List<User> findAll() {
         return userDAO.findAll();
@@ -52,7 +58,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void realizarTransferencia(int idUsuarioRemitente, int idUsuarioDestinatario, double cantidad)
+    public void realizarTransferencia(int idUsuarioRemitente, int idUsuarioDestinatario, double cantidad, String motivo)
             throws SaldoInsuficienteException, UsuarioNoExisteException {
         User remitente = getUserById(idUsuarioRemitente);
         User destinatario = getUserById(idUsuarioDestinatario);
@@ -63,13 +69,31 @@ public class UserServiceImpl implements IUserService {
             double nuevoSaldoRemitente = saldoRemitente - cantidad;
             double nuevoSaldoDestinatario = destinatario.getBalance() + cantidad;
 
+            realizarTransaccion(remitente, destinatario, cantidad, motivo);
+
             remitente.actualizarSaldo(nuevoSaldoRemitente);
             destinatario.actualizarSaldo(nuevoSaldoDestinatario);
+
+
             saveUser(remitente);
             saveUser(destinatario);
         } else {
             throw new SaldoInsuficienteException();
         }
+    }
+
+    private void realizarTransaccion(User remitente, User destinatario, double cantidad, String motivo) {
+        Transaccion transaccion = new Transaccion();
+        transaccion.setMonto(cantidad);
+        transaccion.setMotivo(motivo);
+        transaccion.setFecha(LocalDateTime.now());
+        transaccion.setUsuarioRemitente(remitente);
+        transaccion.setUsuarioDestinatario(destinatario);
+
+        remitente.addTransaccionSaliente(transaccion);
+        destinatario.addTransaccionEntrantes(transaccion);
+
+        transaccionDAO.save(transaccion);
     }
 
     @Override
@@ -80,9 +104,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void depositarDinero(int userId, double amount) throws UsuarioNoExisteException {
+    public void depositarDinero(int userId, double cantidad) throws UsuarioNoExisteException {
         User usuario = getUserById(userId);
-        usuario.depositarDinero(amount);
+        usuario.depositarDinero(cantidad);
         saveUser(usuario);
     }
 

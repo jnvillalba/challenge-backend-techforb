@@ -9,8 +9,7 @@ public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double monto;
-    private TipoTransaccion tipo;
-    private String descripcion;
+    private String motivo;
     private LocalDateTime fecha;
     @ManyToOne
     @JoinColumn(name = "usuario_remitente_id")
@@ -21,11 +20,10 @@ public class Transaccion {
     private User usuarioDestinatario;
 
     public Transaccion() {}
-    public Transaccion(double monto, TipoTransaccion tipo, String descripcion, LocalDateTime fecha,
+    public Transaccion(double monto, String motivo, LocalDateTime fecha,
                        User usuarioRemitente, User usuarioDestinatario) {
         this.monto = monto;
-        this.tipo = tipo;
-        this.descripcion = descripcion;
+        this.motivo = motivo;
         this.fecha = fecha;
         this.usuarioRemitente = usuarioRemitente;
         this.usuarioDestinatario = usuarioDestinatario;
@@ -39,20 +37,12 @@ public class Transaccion {
         this.monto = monto;
     }
 
-    public TipoTransaccion getTipo() {
-        return tipo;
+    public String getMotivo() {
+        return motivo;
     }
 
-    public void setTipo(TipoTransaccion tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
 
     public LocalDateTime getFecha() {
@@ -79,5 +69,7 @@ public class Transaccion {
     public void setUsuarioDestinatario(User usuarioDestinatario) {
         this.usuarioDestinatario = usuarioDestinatario;
     }
+
+
 }
 
