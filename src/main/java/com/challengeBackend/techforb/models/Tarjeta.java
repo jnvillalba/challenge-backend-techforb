@@ -10,7 +10,6 @@ public class Tarjeta {
     private int id;
 
     private String numero;
-    private String titular;
     private LocalDate fechaVencimiento;
     private String codigoSeguridad;
 
@@ -18,9 +17,9 @@ public class Tarjeta {
     @JoinColumn(name = "usuario_id")
     private User usuario;
 
-    public Tarjeta(String numero, String titular, LocalDate fechaVencimiento, String codigoSeguridad, User usuario) {
+    public Tarjeta() {}
+    public Tarjeta(String numero, LocalDate fechaVencimiento, String codigoSeguridad, User usuario) {
         this.numero = numero;
-        this.titular = titular;
         this.fechaVencimiento = fechaVencimiento;
         this.codigoSeguridad = codigoSeguridad;
         this.usuario = usuario;
@@ -42,13 +41,6 @@ public class Tarjeta {
         this.numero = numero;
     }
 
-    public String getTitular() {
-        return titular;
-    }
-
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
 
     public LocalDate getFechaVencimiento() {
         return fechaVencimiento;

@@ -4,6 +4,7 @@ import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
 import com.challengeBackend.techforb.exceptions.UsuarioNoExisteException;
 import com.challengeBackend.techforb.models.Tarjeta;
 import com.challengeBackend.techforb.models.User;
+import com.challengeBackend.techforb.repository.TarjetaDAO;
 import com.challengeBackend.techforb.repository.UserDAO;
 import com.challengeBackend.techforb.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import java.util.Optional;
 public class UserServiceImpl implements IUserService {
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    TarjetaDAO tarjetaDAO;
     @Override
     public List<User> findAll() {
         return userDAO.findAll();
@@ -87,6 +91,7 @@ public class UserServiceImpl implements IUserService {
         User usuario = getUserById(userId);
         usuario.addTarjeta(tarjeta);
         saveUser(usuario);
+        tarjetaDAO.save(tarjeta);
     }
 
     private User getUserById(int userId) throws UsuarioNoExisteException {

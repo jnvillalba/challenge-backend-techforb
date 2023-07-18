@@ -136,5 +136,6 @@ public class User {
 
     public void addTarjeta(Tarjeta tarjeta) {
         this.tarjetas.add(tarjeta);
+        tarjeta.setUsuario(this);
     }
 }

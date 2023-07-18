@@ -19,6 +19,8 @@ public class Transaccion {
     @ManyToOne
     @JoinColumn(name = "usuario_destinatario_id")
     private User usuarioDestinatario;
+
+    public Transaccion() {}
     public Transaccion(double monto, TipoTransaccion tipo, String descripcion, LocalDateTime fecha,
                        User usuarioRemitente, User usuarioDestinatario) {
         this.monto = monto;
