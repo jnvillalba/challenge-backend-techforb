@@ -48,7 +48,7 @@ public class AuthController {
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Mensaje("Campos mal puestos o documento invalido"), HttpStatus.BAD_REQUEST);
         
-        if (usuarioService.exitsByNroDocumento(nuevoUsuario.getNroDocumento()))
+        if (usuarioService.existsByNroDocumento(nuevoUsuario.getNroDocumento()))
             return new ResponseEntity(new Mensaje("Ya existe el numero de documento"), HttpStatus.BAD_REQUEST);
 
         Usuario usuario = new Usuario( nuevoUsuario.getTipoDocumento(),

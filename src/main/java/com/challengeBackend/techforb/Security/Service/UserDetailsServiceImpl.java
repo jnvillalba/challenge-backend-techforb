@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-
 public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     UsuarioService usuarioService;
@@ -20,6 +19,4 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         Usuario usuario = usuarioService.getByNroDocumento(numero).get();
         return UsuarioPrincipal.build(usuario);
     }
-    
-    
 }

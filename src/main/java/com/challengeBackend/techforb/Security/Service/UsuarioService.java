@@ -18,8 +18,8 @@ public class UsuarioService {
         return iUsuarioRepository.findByNroDocumento(nroDocumento);
     }
     
-    public Boolean exitsByNroDocumento(int nroDocumento){
-        return iUsuarioRepository.exitsByNroDocumento(nroDocumento);
+    public Boolean existsByNroDocumento(int nroDocumento){
+        return iUsuarioRepository.existsByNroDocumento(nroDocumento);
     }
 
     public void save(Usuario usuario){

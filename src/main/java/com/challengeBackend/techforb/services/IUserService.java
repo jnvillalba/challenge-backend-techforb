@@ -21,7 +21,7 @@ public interface IUserService {
 
     boolean existsById(int id);
     boolean existsByNroDocumento(int nroDocumento);
-    void realizarTransferencia(int sourceUserId, int targetUserId, double amount) throws SaldoInsuficienteException, UsuarioNoExisteException;
+    void realizarTransferencia(int idUsuarioRemitente, int idUsuarioDestinatario, double cantidad)  throws SaldoInsuficienteException, UsuarioNoExisteException;
 
     void ExtraerDinero(int userId, double amount);
 
