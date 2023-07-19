@@ -1,5 +1,6 @@
 package com.challengeBackend.techforb.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -13,10 +14,12 @@ public class Transaccion {
     private LocalDateTime fecha;
     @ManyToOne
     @JoinColumn(name = "usuario_remitente_id")
+    @JsonManagedReference
     private User usuarioRemitente;
 
     @ManyToOne
     @JoinColumn(name = "usuario_destinatario_id")
+    @JsonManagedReference
     private User usuarioDestinatario;
 
     public Transaccion() {}

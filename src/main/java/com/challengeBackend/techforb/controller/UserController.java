@@ -43,13 +43,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) throws UsuarioNoExisteException {
         Optional<User> userOptional = userService.findById(id);
 

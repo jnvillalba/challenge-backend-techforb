@@ -1,5 +1,7 @@
 package com.challengeBackend.techforb.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -15,6 +17,7 @@ public class Tarjeta {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private User usuario;
 
     public Tarjeta() {}

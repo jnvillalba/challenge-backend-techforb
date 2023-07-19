@@ -1,6 +1,7 @@
 package com.challengeBackend.techforb.models;
 
 import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,9 +26,11 @@ public class User {
     private int nroDocumento;
 
     @OneToMany(mappedBy = "usuarioRemitente")
+    @JsonIgnore
     private Set<Transaccion> transaccionesSalientes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuarioDestinatario")
+    @JsonIgnore
     private Set<Transaccion> transaccionesEntrantes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario")
