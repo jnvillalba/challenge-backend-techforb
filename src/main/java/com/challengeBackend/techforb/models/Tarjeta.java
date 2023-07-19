@@ -15,16 +15,21 @@ public class Tarjeta {
     private LocalDate fechaVencimiento;
     private String codigoSeguridad;
 
+
+
+    private String titular;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
     private User usuario;
 
     public Tarjeta() {}
-    public Tarjeta(String numero, LocalDate fechaVencimiento, String codigoSeguridad, User usuario) {
+    public Tarjeta(String numero, LocalDate fechaVencimiento, String codigoSeguridad, String titular,  User usuario) {
         this.numero = numero;
         this.fechaVencimiento = fechaVencimiento;
         this.codigoSeguridad = codigoSeguridad;
+        this.titular = titular;
         this.usuario = usuario;
     }
 
@@ -67,5 +72,13 @@ public class Tarjeta {
 
     public void setUsuario(User usuario) {
         this.usuario = usuario;
+    }
+
+    public String getTitular() {
+        return titular;
+    }
+
+    public void setTitular(String titular) {
+        this.titular = titular;
     }
 }

@@ -1,7 +1,7 @@
 package com.challengeBackend.techforb.Security.Controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 import com.challengeBackend.techforb.Security.Dto.JwtDto;
 import com.challengeBackend.techforb.Security.Dto.LoginUsuario;
 import com.challengeBackend.techforb.Security.Entity.Role;
@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 @RestController
 @RequestMapping("/auth")
@@ -65,26 +68,43 @@ public class AuthController {
         
         return new ResponseEntity(new Mensaje("Usuario guardado"), HttpStatus.CREATED);
     }
-    
-    
+
+
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Mensaje(bindingResult.getFieldError().toString()), HttpStatus.BAD_REQUEST);
-        
+    public ResponseEntity<?> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            Map<String, String> erroresPorCampo = new HashMap<>();
+            for (FieldError fieldError : fieldErrors) {
+                erroresPorCampo.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return new ResponseEntity<>(erroresPorCampo, HttpStatus.BAD_REQUEST);
+        }
+        if (loginUsuario.getNroDocumento() <= 0) {
+            return new ResponseEntity<>(new Mensaje("El número de documento debe ser mayor que cero"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (loginUsuario.getTipoDocumento() == null) {
+            return new ResponseEntity<>(new Mensaje("El tipo de documento no puede estar vacío"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (StringUtils.isEmpty(loginUsuario.getPassword())) {
+            return new ResponseEntity<>(new Mensaje("La contraseña no puede estar vacía"), HttpStatus.BAD_REQUEST);
+        }
+        // Realizar otras validaciones .ejemplo, verificar si el usuario existe en el sistema o si las credenciales son válidas
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-        loginUsuario.getNroDocumento(),loginUsuario.getPassword()));
-        
+                loginUsuario.getNroDocumento(), loginUsuario.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        
+
         String jwt = jwtprovider.generateToken(authentication);
-        
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        
+
         JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-        
-        return new ResponseEntity(jwtDto, HttpStatus.OK);
-        
+
+        return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
 }

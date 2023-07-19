@@ -26,11 +26,9 @@ public class User {
     private int nroDocumento;
 
     @OneToMany(mappedBy = "usuarioRemitente")
-    @JsonIgnore
     private Set<Transaccion> transaccionesSalientes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuarioDestinatario")
-    @JsonIgnore
     private Set<Transaccion> transaccionesEntrantes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario")
@@ -41,13 +39,13 @@ public class User {
     public User() {
     }
 
-    public User(String nombre, String apellido, int nroDocumento, Set<Transaccion> transaccionesRemitentes,
-                Set<Transaccion> transaccionesDestinatarios, Set<Tarjeta> tarjetas, double balance) {
+    public User(String nombre, String apellido, int nroDocumento, Set<Transaccion> transaccionesSalientes,
+                Set<Transaccion> transaccionesEntrantes, Set<Tarjeta> tarjetas, double balance) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nroDocumento = nroDocumento;
-        this.transaccionesSalientes = transaccionesRemitentes;
-        this.transaccionesEntrantes = transaccionesDestinatarios;
+        this.transaccionesSalientes = transaccionesSalientes;
+        this.transaccionesEntrantes = transaccionesEntrantes;
         this.tarjetas = tarjetas;
         this.balance = balance;
     }
@@ -139,10 +137,12 @@ public class User {
     public void addTarjeta(Tarjeta tarjeta) {
         this.tarjetas.add(tarjeta);
         tarjeta.setUsuario(this);
+        tarjeta.setTitular(this.nombre + " " + this.apellido);
     }
 
     public void addTransaccionSaliente(Transaccion transaccion) {
         this.transaccionesSalientes.add(transaccion);
+
     }
 
     public void addTransaccionEntrantes(Transaccion transaccion) {

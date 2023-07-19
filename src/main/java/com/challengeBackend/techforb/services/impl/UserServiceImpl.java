@@ -74,7 +74,6 @@ public class UserServiceImpl implements IUserService {
             remitente.actualizarSaldo(nuevoSaldoRemitente);
             destinatario.actualizarSaldo(nuevoSaldoDestinatario);
 
-
             saveUser(remitente);
             saveUser(destinatario);
         } else {

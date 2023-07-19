@@ -1,6 +1,8 @@
 package com.challengeBackend.techforb.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,12 +16,12 @@ public class Transaccion {
     private LocalDateTime fecha;
     @ManyToOne
     @JoinColumn(name = "usuario_remitente_id")
-    @JsonManagedReference
+    @JsonIgnoreProperties("transaccionesSalientes")
     private User usuarioRemitente;
 
     @ManyToOne
     @JoinColumn(name = "usuario_destinatario_id")
-    @JsonManagedReference
+    @JsonIgnoreProperties("transaccionesEntrantes")
     private User usuarioDestinatario;
 
     public Transaccion() {}
@@ -55,7 +57,6 @@ public class Transaccion {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-
 
     public User getUsuarioRemitente() {
         return usuarioRemitente;
