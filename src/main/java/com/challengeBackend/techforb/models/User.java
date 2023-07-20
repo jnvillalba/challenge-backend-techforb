@@ -25,11 +25,8 @@ public class User {
     @NotNull
     private int nroDocumento;
 
-    @OneToMany(mappedBy = "usuarioRemitente")
-    private Set<Transaccion> transaccionesSalientes = new HashSet<>();
-
-    @OneToMany(mappedBy = "usuarioDestinatario")
-    private Set<Transaccion> transaccionesEntrantes = new HashSet<>();
+    @OneToMany(mappedBy = "usuario")
+    private Set<Transaccion> transacciones = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario")
     private Set<Tarjeta> tarjetas = new HashSet<>();
@@ -39,13 +36,11 @@ public class User {
     public User() {
     }
 
-    public User(String nombre, String apellido, int nroDocumento, Set<Transaccion> transaccionesSalientes,
-                Set<Transaccion> transaccionesEntrantes, Set<Tarjeta> tarjetas, double balance) {
+    public User(String nombre, String apellido, int nroDocumento, Set<Transaccion> transacciones, Set<Tarjeta> tarjetas, double balance) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nroDocumento = nroDocumento;
-        this.transaccionesSalientes = transaccionesSalientes;
-        this.transaccionesEntrantes = transaccionesEntrantes;
+        this.transacciones = transacciones;
         this.tarjetas = tarjetas;
         this.balance = balance;
     }
@@ -100,20 +95,12 @@ public class User {
         this.balance = balance;
     }
 
-    public Set<Transaccion> getTransaccionesSalientes() {
-        return transaccionesSalientes;
+    public Set<Transaccion> getTransacciones() {
+        return transacciones;
     }
 
-    public void setTransaccionesSalientes(Set<Transaccion> transaccionesSalientes) {
-        this.transaccionesSalientes = transaccionesSalientes;
-    }
-
-    public Set<Transaccion> getTransaccionesEntrantes() {
-        return transaccionesEntrantes;
-    }
-
-    public void setTransaccionesEntrantes(Set<Transaccion> transaccionesEntrantes) {
-        this.transaccionesEntrantes = transaccionesEntrantes;
+    public void setTransacciones(Set<Transaccion> transacciones) {
+        this.transacciones = transacciones;
     }
 
     public void actualizarSaldo(double nuevoSaldo) {
@@ -141,11 +128,12 @@ public class User {
     }
 
     public void addTransaccionSaliente(Transaccion transaccion) {
-        this.transaccionesSalientes.add(transaccion);
-
+        this.transacciones.add(transaccion);
+        transaccion.setTipo(TipoTransaccion.EGRESO);
     }
 
     public void addTransaccionEntrantes(Transaccion transaccion) {
-        this.transaccionesEntrantes.add(transaccion);
+        this.transacciones.add(transaccion);
+        transaccion.setTipo(TipoTransaccion.INGRESO);
     }
 }

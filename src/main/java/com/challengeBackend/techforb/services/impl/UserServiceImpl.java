@@ -83,7 +83,6 @@ public class UserServiceImpl implements IUserService {
 
     private void realizarTransaccion(User remitente, User destinatario, double cantidad, String motivo) {
         Transaccion transaccion = new Transaccion();
-        transaccion.setMonto(cantidad);
         transaccion.setMotivo(motivo);
         transaccion.setFecha(LocalDateTime.now());
         transaccion.setUsuarioRemitente(remitente);

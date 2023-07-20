@@ -11,9 +11,11 @@ public class Transaccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private double monto;
+    private TipoTransaccion tipo;
     private String motivo;
     private LocalDateTime fecha;
+
+    private String estado;
     @ManyToOne
     @JoinColumn(name = "usuario_remitente_id")
     @JsonIgnoreProperties("transaccionesSalientes")
@@ -25,22 +27,16 @@ public class Transaccion {
     private User usuarioDestinatario;
 
     public Transaccion() {}
-    public Transaccion(double monto, String motivo, LocalDateTime fecha,
-                       User usuarioRemitente, User usuarioDestinatario) {
-        this.monto = monto;
+
+    public Transaccion(TipoTransaccion tipo, String motivo, LocalDateTime fecha, String estado, User usuarioRemitente, User usuarioDestinatario) {
+        this.tipo = tipo;
         this.motivo = motivo;
         this.fecha = fecha;
+        this.estado = estado;
         this.usuarioRemitente = usuarioRemitente;
         this.usuarioDestinatario = usuarioDestinatario;
     }
 
-    public double getMonto() {
-        return monto;
-    }
-
-    public void setMonto(double monto) {
-        this.monto = monto;
-    }
 
     public String getMotivo() {
         return motivo;
@@ -75,5 +71,20 @@ public class Transaccion {
     }
 
 
+    public TipoTransaccion getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransaccion tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }
 
