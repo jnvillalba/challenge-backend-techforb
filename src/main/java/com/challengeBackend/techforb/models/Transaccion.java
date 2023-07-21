@@ -14,10 +14,9 @@ public class Transaccion {
     private TipoTransaccion tipo;
     private String motivo;
     private LocalDateTime fecha;
-
     private String estado;
     @ManyToOne
-    @JoinColumn(name = "usuario_remitente_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("transacciones")
     private User usuarioRemitente;
 

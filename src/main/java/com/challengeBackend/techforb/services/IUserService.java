@@ -3,6 +3,7 @@ package com.challengeBackend.techforb.services;
 import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
 import com.challengeBackend.techforb.exceptions.UsuarioNoExisteException;
 import com.challengeBackend.techforb.models.Tarjeta;
+import com.challengeBackend.techforb.models.Transaccion;
 import com.challengeBackend.techforb.models.User;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface IUserService {
     void depositarDinero(int userId, double amount) throws UsuarioNoExisteException;
 
     void addTarjeta(int userId, Tarjeta tarjeta) throws UsuarioNoExisteException;
+
+     List<Transaccion> getTransactions(int userId);
 }

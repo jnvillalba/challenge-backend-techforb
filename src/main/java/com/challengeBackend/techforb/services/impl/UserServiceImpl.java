@@ -126,4 +126,10 @@ public class UserServiceImpl implements IUserService {
 
         return userOptional.get();
     }
+    @Override
+    public List<Transaccion> getTransactions(int userId){
+        User user = userDAO.findById(userId).get();
+        return transaccionDAO.findAllByUsuarioDestinarioIdOrUsuarioRemitenteId(Optional.of(user));
+    }
+
 }

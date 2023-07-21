@@ -92,9 +92,6 @@ public class AuthController {
             return new ResponseEntity<>(new Mensaje("La contraseña no puede estar vacía"), HttpStatus.BAD_REQUEST);
         }
         Optional<Usuario> usuario = usuarioService.getByNroDocumento(loginUsuario.getNroDocumento());
-        if (usuario != null) {
-            return new ResponseEntity<>(new Mensaje("Usuario ya registrado"), HttpStatus.CONFLICT);
-        }
 
         if (usuario == null) {
             return new ResponseEntity<>(new Mensaje("Usuario no encontrado"), HttpStatus.NOT_FOUND);

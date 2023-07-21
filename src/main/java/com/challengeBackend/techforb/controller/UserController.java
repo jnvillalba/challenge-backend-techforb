@@ -4,6 +4,7 @@ import com.challengeBackend.techforb.Security.Controller.Mensaje;
 import com.challengeBackend.techforb.exceptions.SaldoInsuficienteException;
 import com.challengeBackend.techforb.exceptions.UsuarioNoExisteException;
 import com.challengeBackend.techforb.models.Tarjeta;
+import com.challengeBackend.techforb.models.Transaccion;
 import com.challengeBackend.techforb.models.User;
 import com.challengeBackend.techforb.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class UserController {
 
         User user = userOptional.get();
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/{id}/transacciones")
+    public ResponseEntity<List<Transaccion>> getTransactions(@PathVariable int id) {
+        List<Transaccion> tranx = userService.getTransactions(id);
+        return ResponseEntity.ok(tranx);
     }
 
     @PostMapping("/create")
@@ -104,4 +111,6 @@ public class UserController {
         userService.addTarjeta(userId, tarjeta);
         return new ResponseEntity(new Mensaje("Tarjeta Agregada"), HttpStatus.OK);
     }
+
+
 }
