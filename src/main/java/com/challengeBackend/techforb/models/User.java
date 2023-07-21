@@ -25,7 +25,7 @@ public class User {
     @NotNull
     private int nroDocumento;
 
-    @OneToMany()
+    @OneToMany( mappedBy = "usuarioRemitente")
     private Set<Transaccion> transacciones = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario")
