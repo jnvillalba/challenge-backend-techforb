@@ -60,7 +60,9 @@ public class AuthController {
         
         Set<Role> roles = new HashSet<>();
         roles.add(rolService.getByRoleNombre(RoleNombre.ROLE_USER).get());
-        
+        //hardcodeo admin para el front
+        roles.add(rolService.getByRoleNombre(RoleNombre.ROLE_ADMIN).get());
+
         if(nuevoUsuario.getRoles().contains("admin"))
             roles.add(rolService.getByRoleNombre(RoleNombre.ROLE_ADMIN).get());
         usuario.setRoles(roles);
