@@ -91,7 +91,14 @@ public class AuthController {
         if (StringUtils.isEmpty(loginUsuario.getPassword())) {
             return new ResponseEntity<>(new Mensaje("La contraseña no puede estar vacía"), HttpStatus.BAD_REQUEST);
         }
-        // Realizar otras validaciones .ejemplo, verificar si el usuario existe en el sistema o si las credenciales son válidas
+        Optional<Usuario> usuario = usuarioService.getByNroDocumento(loginUsuario.getNroDocumento());
+        if (usuario != null) {
+            return new ResponseEntity<>(new Mensaje("Usuario ya registrado"), HttpStatus.CONFLICT);
+        }
+
+        if (usuario == null) {
+            return new ResponseEntity<>(new Mensaje("Usuario no encontrado"), HttpStatus.NOT_FOUND);
+        }
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginUsuario.getNroDocumento(), loginUsuario.getPassword()));

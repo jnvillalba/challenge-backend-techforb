@@ -15,8 +15,6 @@ public class Tarjeta {
     private LocalDate fechaVencimiento;
     private String codigoSeguridad;
 
-
-
     private String titular;
 
     @ManyToOne

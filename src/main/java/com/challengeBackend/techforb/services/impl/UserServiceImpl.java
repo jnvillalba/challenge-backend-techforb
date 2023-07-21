@@ -87,6 +87,7 @@ public class UserServiceImpl implements IUserService {
         transaccion.setFecha(LocalDateTime.now());
         transaccion.setUsuarioRemitente(remitente);
         transaccion.setUsuarioDestinatario(destinatario);
+        transaccion.setEstado("Completado");
 
         remitente.addTransaccionSaliente(transaccion);
         destinatario.addTransaccionEntrantes(transaccion);

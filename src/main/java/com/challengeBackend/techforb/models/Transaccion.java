@@ -18,12 +18,12 @@ public class Transaccion {
     private String estado;
     @ManyToOne
     @JoinColumn(name = "usuario_remitente_id")
-    @JsonIgnoreProperties("transaccionesSalientes")
+    @JsonIgnoreProperties("transacciones")
     private User usuarioRemitente;
 
     @ManyToOne
     @JoinColumn(name = "usuario_destinatario_id")
-    @JsonIgnoreProperties("transaccionesEntrantes")
+    @JsonIgnoreProperties("transacciones")
     private User usuarioDestinatario;
 
     public Transaccion() {}
