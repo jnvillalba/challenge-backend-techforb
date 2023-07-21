@@ -70,7 +70,7 @@ class TechforbApplicationTests {
 
 		Usuario usuarioGuardado = usuarios.get(0);
 		assertThat(usuarioGuardado.getTipoDocumento()).isEqualTo(TipoDeDocumento.DNI);
-		assertThat(usuarioGuardado.getNroDocumento()).isEqualTo("12345678");
+		assertThat(usuarioGuardado.getNroDocumento()).isEqualTo(12345678);
 		assertThat(usuarioGuardado.getRoles(),hasSize(2));
 	}
 
